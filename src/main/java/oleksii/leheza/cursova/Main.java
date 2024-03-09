@@ -3,18 +3,17 @@ package oleksii.leheza.cursova;
 import oleksii.leheza.cursova.alghorithm.StripedMatrixMultiplication;
 import oleksii.leheza.cursova.basic.BasicMatrixMultiply;
 import oleksii.leheza.cursova.matrix.Matrix;
-import oleksii.leheza.cursova.matrix.Result;
 import oleksii.leheza.cursova.util.MatrixUtil;
 
 
 public class Main {
     // Чи можна множити лише квадратні матриці
-
+// 2500 / 5 == 2.88
 
     public static void main(String[] args) {
 
         int matrixSize = 1000;
-        int threadAmount = 4;
+        int threadAmount = 5;
         MatrixUtil matrixUtil = new MatrixUtil();
         Matrix matrix = matrixUtil.initializeRandomMatrix(matrixSize);
 //       printMatrix(matrix);
@@ -27,7 +26,6 @@ public class Main {
         long endTime1 = System.currentTimeMillis();
 
         Matrix result2Matrix = new Matrix(matrixSize);
-//        Result result2 = new Result(matrix);
         long startTime2 = System.currentTimeMillis();
         stripedMatrixMultiplication.multiply(matrix, matrix, threadAmount, result2Matrix);
         long endTime2 = System.currentTimeMillis();

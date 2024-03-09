@@ -13,7 +13,7 @@ public class MatrixUtil {
         for (int i = 0; i < matrixSize; i++) {
             for (int j = 0; j < matrixSize; j++) {
 //                matrix.setValue(i, j, random.nextInt() % 10);
-                matrix.setValue(i, j, 10);
+                matrix.setValue(i, j, 1);
             }
         }
         return matrix;

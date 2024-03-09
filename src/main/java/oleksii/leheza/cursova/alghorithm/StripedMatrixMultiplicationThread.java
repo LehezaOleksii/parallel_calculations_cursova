@@ -2,7 +2,6 @@ package oleksii.leheza.cursova.alghorithm;
 
 
 import oleksii.leheza.cursova.matrix.Matrix;
-import oleksii.leheza.cursova.matrix.Result;
 
 public class StripedMatrixMultiplicationThread implements Runnable {
 

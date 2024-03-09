@@ -21,7 +21,7 @@ public class StripedMatrixMultiplication {
         }
         executorService.shutdown();
         try {
-            if (executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+            if (executorService.awaitTermination(120, TimeUnit.SECONDS)) {
                 executorService.shutdownNow();
             }
         } catch (InterruptedException e) {
