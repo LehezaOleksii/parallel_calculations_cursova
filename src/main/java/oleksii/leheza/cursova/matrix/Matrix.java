@@ -1,5 +1,7 @@
 package oleksii.leheza.cursova.matrix;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Matrix {
 
     private final int[][] matrix;
@@ -22,7 +24,7 @@ public class Matrix {
     public int[] getColumn(int columnNumber) {
         int[] column = new int[matrixSize];
         for (int i = 0; i < matrixSize; i++) {
-            column[i] = matrix[columnNumber][i];
+            column[i] = matrix[i][columnNumber];
         }
         return column;
     }
@@ -42,8 +44,7 @@ public class Matrix {
     public int getMatrixSize() {
         return matrixSize;
     }
-
-    public int[][] getMatrix(){
+    public int[][] getMatrix() {
         return matrix;
     }
 }

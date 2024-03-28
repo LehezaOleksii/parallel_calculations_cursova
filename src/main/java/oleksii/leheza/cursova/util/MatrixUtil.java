@@ -10,10 +10,11 @@ public class MatrixUtil {
     public Matrix initializeRandomMatrix(int matrixSize) {
         Random random = new Random();
         Matrix matrix = new Matrix(matrixSize);
+        int counter=0;
         for (int i = 0; i < matrixSize; i++) {
             for (int j = 0; j < matrixSize; j++) {
 //                matrix.setValue(i, j, random.nextInt() % 10);
-                matrix.setValue(i, j, 1);
+                matrix.setValue(i, j, counter++);
             }
         }
         return matrix;

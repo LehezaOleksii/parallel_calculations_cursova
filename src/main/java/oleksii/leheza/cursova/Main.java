@@ -12,31 +12,32 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int matrixSize = 1000;
-        int threadAmount = 5;
+        int matrixSize = 6;
+        int threadAmount = 3;
         MatrixUtil matrixUtil = new MatrixUtil();
         Matrix matrix = matrixUtil.initializeRandomMatrix(matrixSize);
-//       printMatrix(matrix);
+        printMatrix(matrix.getMatrix());
+        Matrix result1 = new Matrix(matrixSize);
+        Matrix result2Matrix = new Matrix(matrixSize);
 
         BasicMatrixMultiply basicMatrixMultiply = new BasicMatrixMultiply();
-        StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication();
-        Matrix result1 = new Matrix(matrixSize);
+        StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication(matrix, matrix, threadAmount, result2Matrix);
         long startTime1 = System.currentTimeMillis();
         basicMatrixMultiply.multiplyMatrix(matrix, matrix, result1);
         long endTime1 = System.currentTimeMillis();
 
-        Matrix result2Matrix = new Matrix(matrixSize);
+        System.out.println("---------------Result Matrix 1---------------");
+        printMatrix(result1.getMatrix());
+
         long startTime2 = System.currentTimeMillis();
-        stripedMatrixMultiplication.multiply(matrix, matrix, threadAmount, result2Matrix);
+        stripedMatrixMultiplication.multiply();
         long endTime2 = System.currentTimeMillis();
         double resultTime1 = endTime1 - startTime1;
         double resultTime2 = endTime2 - startTime2;
 
 
-//        System.out.println("---------------Result Matrix 1---------------");
-//        printMatrix(result1.getMatrix());
-//        System.out.println("---------------Result Matrix 2---------------");
-//        printMatrix(result2.getMatrix());
+        System.out.println("---------------Result Matrix 2---------------");
+        printMatrix(result2Matrix.getMatrix());
 
         System.out.println("---------------Result---------------" +
                 "\nSimple matrix multiplication: " + resultTime1 +
