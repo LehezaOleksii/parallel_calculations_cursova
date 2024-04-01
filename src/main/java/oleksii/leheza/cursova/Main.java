@@ -12,8 +12,8 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("---------------Start program---------------");
-        int matrixSize = 500;
-        int threadAmount = 5;
+        int matrixSize = 1000;
+        int threadAmount = 6;
         MatrixUtil matrixUtil = new MatrixUtil();
         Matrix matrix = matrixUtil.initializeRandomMatrix(matrixSize);
 //        printMatrix(matrix.getMatrix());
@@ -39,12 +39,12 @@ public class Main {
 //        System.out.println("---------------Result Matrix 2---------------");
 //        printMatrix(result2Matrix.getMatrix());
 
-        System.out.println("---------------Result---------------" +
+        System.out.println("------------------Result-------------------" +
                 "\nSimple matrix multiplication: " + resultTime1 +
                 "\nTape matrix multiplication: " + resultTime2 + "; speedup = " + resultTime1 / resultTime2
         );
-        System.out.println(matrixUtil.isMatricesEqual(result1, result2Matrix));
-        System.out.println("---------------End program---------------");
+        System.out.println("Are matrix equals: " + matrixUtil.isMatrixsEqual(result1, result2Matrix));
+        System.out.println("----------------End program----------------");
     }
 
     public static void printMatrix(int[][] matrix) {

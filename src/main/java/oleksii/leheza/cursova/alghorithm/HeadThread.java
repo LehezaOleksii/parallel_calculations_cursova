@@ -84,16 +84,11 @@ public class HeadThread extends Thread {
             }
 
             int columnNumber = (i + iteration) % matrixLength;
-            result.setValue(i, columnNumber, sum);//last column row index
+            result.matrix[i][columnNumber] = sum;//last column row index
         }
-        isEndIteration = true; // need new iteration  not ++    AND we need to wait all other threads and than set new iteration
         synchronized (lock) {
             lock.notifyAll();
         }
-    }
-
-    private void setValueToMatrix(int rowNumber, int columnNumber, int sum) {
-        result.setValue(rowNumber, columnNumber, sum);
     }
 
     public void addColumnToQueue(int[] column) {
@@ -112,11 +107,6 @@ public class HeadThread extends Thread {
         return isNeedNewData;
     }
 
-    public int getAndIncrementLastRowIndex() {
-        return lastNeewRowIndex.getAndIncrement();
-    }
-
-
     public void incrementLastColumnIndex() {
         if (lastNeedColumnIndex.get() >= matrixLength - 1) {
             lastNeedColumnIndex.set(0);
@@ -129,15 +119,6 @@ public class HeadThread extends Thread {
         lastNeewRowIndex.incrementAndGet();
     }
 
-    public int getAndIncrementLastColumnIndex() {
-        if (lastNeedColumnIndex.get() >= matrixLength - 1) {
-            lastNeedColumnIndex.set(0);
-        } else {
-            return lastNeedColumnIndex.getAndIncrement();
-        }
-        return lastNeedColumnIndex.get();
-    }
-
     public int getLastRowIndex() {
         return lastNeewRowIndex.get();
     }
@@ -146,53 +127,7 @@ public class HeadThread extends Thread {
         return lastNeedColumnIndex.get();
     }
 
-
-    public void setNextThread(SubThread nextThread) {
-        this.nextThread = nextThread;
-    }
-
-    public void setIteration(int iteration) {
-        this.iteration = iteration;
-    }
-
-    public void setIsEndIteration(boolean isEndIteration) {
-        this.isEndIteration = isEndIteration;
-    }
-
-    public boolean getIsEndIteration() {
-        return isEndIteration;
-    }
-
     public void setSubThread(SubThread subThread) {
         this.nextThread = subThread;
     }
-
-    public void setLastColumnIndex(int value) {
-        lastNeedColumnIndex.set(value);
-    }
 }
-
-//            for (int j = startColumnNumber; j < result.getMatrixSize(); j++) {
-//                while (column) {
-//                    try {
-//                        wait();
-//                    } catch (InterruptedException e) {
-//                        System.err.print(e.getMessage());
-//                    }
-//                }
-
-
-//                int[] column = new int[secondMatrix.getColumn(1).length];
-//                for (int k = 0; k < matrixLength; k++) {
-//                    if (j - i >= 0) {
-//                        column[k] = secondMatrix.getValue(k, j - i);
-//                    } else {
-//                        column[k] = secondMatrix.getValue(k, matrixLength + (j - i));
-//                    }
-//                }
-
-//                executor.execute(new StripedMatrixMultiplicationThread(firstMatrix.getRow(i), column, i, j, result));
-//                int columnNumber = j - i;
-//                if (columnNumber < 0) {
-//                    columnNumber += matrixLength;
-//                }

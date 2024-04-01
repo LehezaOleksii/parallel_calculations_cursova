@@ -19,7 +19,7 @@ public class SubThread extends Thread {
 
     private SubThread nextThread;
 
-    public Object lockObj = new Object();
+    public final Object lockObj = new Object();
 
 //    private AtomicInteger lastColumn = new AtomicInteger();
 //
@@ -38,7 +38,7 @@ public class SubThread extends Thread {
         int[] row;
         int[] column;
         for (int i = 0; i < matrixLength; i++) {
-            while (rows.isEmpty() && columns.isEmpty()) {
+            while (rows.isEmpty()) {
                 try {
                     synchronized (lockObj) {
                         lockObj.wait();
@@ -46,6 +46,7 @@ public class SubThread extends Thread {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
             }
             try {
                 if (i == matrixLength - 1) {
@@ -75,15 +76,11 @@ public class SubThread extends Thread {
             }
 
             int columnNumber = (i + iteration) % matrixLength;
-            result.setValue(i, columnNumber, sum);//last column row index
+            result.matrix[i][columnNumber] = sum;//last column row index
         }
 //            isEndIteration = true; // need new iteration  not ++    AND we need to wait all other threads and than set new iteration
 //            lastRow.set(0);
 //            lastColumn.set(iteration);
-    }
-
-    private void setValueToMatrix(int rowNumber, int columnNumber, int sum) {
-        result.setValue(rowNumber, columnNumber, sum);
     }
 
     public void addColumnToQueue(int[] column) {
@@ -118,10 +115,6 @@ public class SubThread extends Thread {
 //    public int getLastRowIndex() {
 //        return lastRow.get();
 //    }
-
-    public int getIteration() {
-        return iteration;
-    }
 
     public void addValueToLastColumns(int[] column) {
         lastColumns.add(column);
