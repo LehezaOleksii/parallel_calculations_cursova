@@ -24,9 +24,9 @@ public class HeadThread extends Thread {
     private boolean isNeedNewData;
     private boolean isEndIteration;
 
-    private AtomicInteger lastNeedColumnIndex = new AtomicInteger();
+    public AtomicInteger lastNeedColumnIndex = new AtomicInteger();
 
-    private AtomicInteger lastNeewRowIndex = new AtomicInteger();
+    public AtomicInteger lastNeewRowIndex = new AtomicInteger();
 
     private int matrixLength;
 

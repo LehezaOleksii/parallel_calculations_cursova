@@ -25,14 +25,7 @@ public class StripedMatrixMultiplication {
         if (firstMatrix.getRow(0).length != secondMatrix.getColumn(0).length) {
             throw new RuntimeException("Different length");
         }
-        //prepare thread
-        //start Threads
-        //maintain threads
-        //finish
-        multiply1();
-    }
 
-    public void multiply1() {
         //prepare thread
         List<SubThread> subThreads = null;
         for (int i = 0; i < firstMatrix.getMatrix().length; i += threadsAmount) {
@@ -98,8 +91,8 @@ public class StripedMatrixMultiplication {
     }
 
     private void setValueAndIncrementIndexes(HeadThread headThread) {
-        headThread.addRowToQueue(firstMatrix.getRow(headThread.getLastRowIndex()));
-        headThread.addColumnToQueue(secondMatrix.getColumn(headThread.getLastColumnIndex()));
+        headThread.addRowToQueue(firstMatrix.getRow(headThread.lastNeewRowIndex.get()));
+        headThread.addColumnToQueue(secondMatrix.getColumn(headThread.lastNeedColumnIndex.get()));
         headThread.incrementLastColumnIndex();
         headThread.incrementLastRowIndex();
     }

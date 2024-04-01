@@ -7,8 +7,6 @@ import oleksii.leheza.cursova.util.MatrixUtil;
 
 
 public class Main {
-    // Чи можна множити лише квадратні матриці
-// 2500 / 5 == 2.88
 
     public static void main(String[] args) {
         System.out.println("---------------Start program---------------");
@@ -16,6 +14,7 @@ public class Main {
         int threadAmount = 6;
         MatrixUtil matrixUtil = new MatrixUtil();
         Matrix matrix = matrixUtil.initializeRandomMatrix(matrixSize);
+//        System.out.println("---------------Main Matrix ---------------");
 //        printMatrix(matrix.getMatrix());
         Matrix result1 = new Matrix(matrixSize);
         Matrix result2Matrix = new Matrix(matrixSize);
@@ -41,7 +40,7 @@ public class Main {
 
         System.out.println("------------------Result-------------------" +
                 "\nSimple matrix multiplication: " + resultTime1 +
-                "\nTape matrix multiplication: " + resultTime2 + "; speedup = " + resultTime1 / resultTime2
+                "\nStriped matrix multiplication: " + resultTime2 + "; speedup = " + resultTime1 / resultTime2
         );
         System.out.println("Are matrix equals: " + matrixUtil.isMatrixsEqual(result1, result2Matrix));
         System.out.println("----------------End program----------------");
