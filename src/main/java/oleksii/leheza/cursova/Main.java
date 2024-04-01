@@ -11,12 +11,12 @@ public class Main {
 // 2500 / 5 == 2.88
 
     public static void main(String[] args) {
-
-        int matrixSize = 6;
-        int threadAmount = 3;
+        System.out.println("---------------Start program---------------");
+        int matrixSize = 500;
+        int threadAmount = 5;
         MatrixUtil matrixUtil = new MatrixUtil();
         Matrix matrix = matrixUtil.initializeRandomMatrix(matrixSize);
-        printMatrix(matrix.getMatrix());
+//        printMatrix(matrix.getMatrix());
         Matrix result1 = new Matrix(matrixSize);
         Matrix result2Matrix = new Matrix(matrixSize);
 
@@ -26,8 +26,8 @@ public class Main {
         basicMatrixMultiply.multiplyMatrix(matrix, matrix, result1);
         long endTime1 = System.currentTimeMillis();
 
-        System.out.println("---------------Result Matrix 1---------------");
-        printMatrix(result1.getMatrix());
+//        System.out.println("---------------Result Matrix 1---------------");
+//        printMatrix(result1.getMatrix());
 
         long startTime2 = System.currentTimeMillis();
         stripedMatrixMultiplication.multiply();
@@ -36,14 +36,15 @@ public class Main {
         double resultTime2 = endTime2 - startTime2;
 
 
-        System.out.println("---------------Result Matrix 2---------------");
-        printMatrix(result2Matrix.getMatrix());
+//        System.out.println("---------------Result Matrix 2---------------");
+//        printMatrix(result2Matrix.getMatrix());
 
         System.out.println("---------------Result---------------" +
                 "\nSimple matrix multiplication: " + resultTime1 +
                 "\nTape matrix multiplication: " + resultTime2 + "; speedup = " + resultTime1 / resultTime2
         );
         System.out.println(matrixUtil.isMatricesEqual(result1, result2Matrix));
+        System.out.println("---------------End program---------------");
     }
 
     public static void printMatrix(int[][] matrix) {
