@@ -2,13 +2,23 @@ package oleksii.leheza.cursova.util;
 
 public class Synchronizer {
 
-    private boolean isEnd;
+    private boolean isCycleEnd;
 
-    public boolean getIsEnd() {
-        return isEnd;
+    private boolean isAlgorithmEnd;
+
+    public void setCycleEnd(boolean cycleEnd) {
+        isCycleEnd = cycleEnd;
     }
 
-    public void setIsEnd(boolean isEnd) {
-        this.isEnd = isEnd;
+    public boolean getCycleEnd() {
+        return isCycleEnd;
+    }
+
+    public void setAlgorithmEnd(boolean isAlgorithmEnd) {
+        this.isAlgorithmEnd = isAlgorithmEnd;
+    }
+
+    public boolean getAlgorithmEnd() {
+        return isAlgorithmEnd;
     }
 }

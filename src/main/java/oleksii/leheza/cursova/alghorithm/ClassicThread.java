@@ -3,54 +3,65 @@ package oleksii.leheza.cursova.alghorithm;
 import oleksii.leheza.cursova.matrix.Matrix;
 import oleksii.leheza.cursova.util.Synchronizer;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class HeadThread extends ClassicThread {
+public class ClassicThread extends Thread {
+    protected int iteration;
 
-    private final Object lock;
+    protected Matrix result;
 
-    private boolean isNeedNewData;
+    protected BlockingQueue<int[]> columns = new LinkedBlockingQueue<>();
 
-    public AtomicInteger lastNeedColumnIndex = new AtomicInteger();
+    protected int[] lastColumn;
 
-    public AtomicInteger lastNeedRowIndex = new AtomicInteger();
-
-    public Synchronizer synchronizer;
+    protected BlockingQueue<int[]> rows = new LinkedBlockingQueue<>();
 
 
-    public HeadThread(Matrix result, int iteration, int matrixLength, Object lock, Synchronizer synchronizer) {
-        super(result, iteration, matrixLength, synchronizer);
+    protected ClassicThread nextThread;
+
+    public final Object lockObj = new Object();
+    protected int matrixLength;
+
+    protected Synchronizer synchronizer;
+
+    public ClassicThread(Matrix result, int iteration, int matrixLength, Synchronizer synchronizer) {
         this.result = result;
         this.iteration = iteration;
-        this.lock = lock;
         this.matrixLength = matrixLength;
         this.synchronizer = synchronizer;
+        lastColumn = new int[result.getMatrixSize()];
     }
 
     @Override
     public void run() {
+        multiply();
+    }
+
+    protected void multiply() {
         int[] row;
         int[] column;
         while (!synchronizer.getAlgorithmEnd()) {
             for (int i = 0; i < matrixLength; i++) {
-                while (rows.isEmpty() && columns.isEmpty()) {
-                    isNeedNewData = true;
+                while (rows.isEmpty()) {
                     try {
-                        synchronized (lock) {
-                            lock.notify();
-                            lock.wait();
+                        synchronized (lockObj) {
+                            lockObj.wait();
                         }
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 }
                 try {
-                    column = columns.take();
+                    if (i == matrixLength - 1) {
+                        column = lastColumn;
+                    } else {
+                        column = columns.take();
+                    }
                     row = rows.take();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
                 if (nextThread != null) {
                     if (i == 0) {
                         nextThread.setValueToLastColumn(column);
@@ -62,6 +73,7 @@ public class HeadThread extends ClassicThread {
                         nextThread.lockObj.notify();
                     }
                 }
+
                 int sum = 0;
                 for (int n = 0; n < row.length; n++) {
                     sum += row[n] * column[n];
@@ -70,13 +82,13 @@ public class HeadThread extends ClassicThread {
                 int columnNumber = (i + iteration) % matrixLength;
                 result.matrix[i][columnNumber] = sum;
             }
-            while (synchronizer.getCycleEnd()) {
-                try {
-                    synchronized (synchronizer) {
+            synchronized (synchronizer) {
+                while (synchronizer.getCycleEnd()) {
+                    try {
                         synchronizer.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
             }
         }
@@ -90,27 +102,15 @@ public class HeadThread extends ClassicThread {
         rows.add(row);
     }
 
-    public void setIsNeedNewData(boolean isNeedNewRow) {
-        this.isNeedNewData = isNeedNewRow;
+    public void setValueToLastColumn(int[] column) {
+        lastColumn = column;
     }
 
-    public boolean getIsNeedNewData() {
-        return isNeedNewData;
+    public void setSubThread(ClassicThread classicThread) {
+        this.nextThread = classicThread;
     }
 
-    public void incrementLastColumnIndex() {
-        if (lastNeedColumnIndex.get() >= matrixLength - 1) {
-            lastNeedColumnIndex.set(0);
-        } else {
-            lastNeedColumnIndex.getAndIncrement();
-        }
-    }
-
-    public void incrementLastRowIndex() {
-        lastNeedRowIndex.incrementAndGet();
-    }
-
-    public int getLastRowIndex() {
-        return lastNeedRowIndex.get();
+    public void setIteration(int iteration) {
+        this.iteration = iteration;
     }
 }
