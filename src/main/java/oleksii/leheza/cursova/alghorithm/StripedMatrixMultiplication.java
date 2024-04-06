@@ -3,6 +3,8 @@ package oleksii.leheza.cursova.alghorithm;
 import oleksii.leheza.cursova.matrix.Matrix;
 import oleksii.leheza.cursova.util.Synchronizer;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class StripedMatrixMultiplication {
 
         //prepare thread
         synchronizer = new Synchronizer();
-        HeadThread headThread = new HeadThread(result, 0, firstMatrix.getMatrixSize(), lock, synchronizer);
+        HeadThread headThread = new HeadThread(result, 0, firstMatrix.getMatrixSize(), lock, synchronizer,threadsAmount);
         List<ClassicThread> threads = new LinkedList<>();
         threads.add(headThread);
         ClassicThread lastClassicThread = null;
@@ -39,20 +41,20 @@ public class StripedMatrixMultiplication {
         int iteration = 1;
         for (; iteration < threadsAmount - 1; iteration++) {
             if (lastClassicThread == null) {
-                lastClassicThread = new ClassicThread(result, iteration, firstMatrix.getMatrixSize(), synchronizer);
+                lastClassicThread = new ClassicThread(result, iteration, firstMatrix.getMatrixSize(), synchronizer,threadsAmount);
                 headThread.setSubThread(lastClassicThread);
             } else {
-                ClassicThread classicThread = new ClassicThread(result, iteration, firstMatrix.getMatrixSize(), synchronizer);
+                ClassicThread classicThread = new ClassicThread(result, iteration, firstMatrix.getMatrixSize(), synchronizer,threadsAmount);
                 lastClassicThread.setSubThread(classicThread);
                 lastClassicThread = classicThread;
             }
             threads.add(lastClassicThread);
         }
-        EndThread endThread = new EndThread(result, threadsAmount - 1, firstMatrix.getMatrixSize(), synchronizer);
+        EndThread endThread = new EndThread(result, threadsAmount - 1, firstMatrix.getMatrixSize(), synchronizer,threadsAmount);
         lastClassicThread.setSubThread(endThread);
         threads.add(endThread);
         //start threads
-        for (Thread process : threads) {
+        for (ClassicThread process : threads) {
             process.start();
         }
         //maintain threads
@@ -84,7 +86,7 @@ public class StripedMatrixMultiplication {
             }
 
             synchronized (synchronizer) {
-                while (!synchronizer.getCycleEnd()) {
+                while (!synchronizer.getCycleEnd() && !(i+threadsAmount> firstMatrix.getMatrixSize())) {
                     try {
                         synchronizer.wait();
                     } catch (InterruptedException e) {
@@ -93,24 +95,16 @@ public class StripedMatrixMultiplication {
                 }
             }
             i += threadsAmount;
-            iteration = i;
-            for (ClassicThread thread : threads) {
-                thread.setIteration(iteration++);
-            }
-            headThread.lastNeedRowIndex.set(0);
-            headThread.lastNeedColumnIndex.set(i);
             synchronizer.setCycleEnd(false);
             synchronized (synchronizer) {
                 synchronizer.notifyAll();
             }
         }
-        while (!synchronizer.getAlgorithmEnd()) {
-            synchronized (synchronizer) {
-                try {
-                    synchronizer.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+        for (ClassicThread thread : threads) {
+            try{
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }

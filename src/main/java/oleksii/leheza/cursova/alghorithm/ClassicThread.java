@@ -23,25 +23,29 @@ public class ClassicThread extends Thread {
     public final Object lockObj = new Object();
     protected int matrixLength;
 
-    protected Synchronizer synchronizer;
+    protected final Synchronizer synchronizer;
 
-    public ClassicThread(Matrix result, int iteration, int matrixLength, Synchronizer synchronizer) {
+    protected int threadAmount;
+
+    public ClassicThread(Matrix result, int iteration, int matrixLength, Synchronizer synchronizer, int threadAmount) {
         this.result = result;
         this.iteration = iteration;
         this.matrixLength = matrixLength;
         this.synchronizer = synchronizer;
+        this.threadAmount = threadAmount;
         lastColumn = new int[result.getMatrixSize()];
     }
 
     @Override
     public void run() {
         multiply();
+        System.out.println("2");
     }
 
     protected void multiply() {
         int[] row;
         int[] column;
-        while (!synchronizer.getAlgorithmEnd()) {
+        while (iteration <matrixLength) {
             for (int i = 0; i < matrixLength; i++) {
                 while (rows.isEmpty()) {
                     try {
@@ -91,6 +95,7 @@ public class ClassicThread extends Thread {
                     }
                 }
             }
+            iteration+=threadAmount;
         }
     }
 

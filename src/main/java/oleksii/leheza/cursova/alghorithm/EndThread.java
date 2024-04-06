@@ -5,19 +5,15 @@ import oleksii.leheza.cursova.util.Synchronizer;
 
 public class EndThread extends ClassicThread {
 
-    public Synchronizer synchronizer;
-
-    public EndThread(Matrix result, int iteration, int matrixLength, Synchronizer synchronizer) {
-        super(result, iteration, matrixLength, synchronizer);
-        this.synchronizer = synchronizer;
+    public EndThread(Matrix result, int iteration, int matrixLength, Synchronizer synchronizer,int threadAmount) {
+        super(result, iteration, matrixLength, synchronizer,threadAmount);
     }
 
     @Override
     public void run() {
-
         int[] row;
         int[] column;
-        while (!synchronizer.getAlgorithmEnd()) {
+        while (iteration<matrixLength) {
             for (int i = 0; i < matrixLength; i++) {
                 while (rows.isEmpty()) {
                     try {
@@ -58,17 +54,12 @@ public class EndThread extends ClassicThread {
                 int columnNumber = (i + iteration) % matrixLength;
                 result.matrix[i][columnNumber] = sum;
             }
-
-            if (iteration >= matrixLength - 1) {
-                synchronizer.setAlgorithmEnd(true);
-                synchronized (synchronizer) {
-                    synchronizer.notifyAll();
-                }
-            }
             synchronizer.setCycleEnd(true);
             synchronized (synchronizer) {
                 synchronizer.notifyAll();
             }
+            iteration+=threadAmount;
         }
+        System.out.println("3");
     }
 }
