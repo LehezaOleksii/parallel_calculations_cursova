@@ -14,8 +14,8 @@ public class Main {
     // 6-2000 - 4,4
     public static void main(String[] args) {
         System.out.println("---------------Start program---------------");
-        int matrixSize = 500;
-        int threadAmount = 13;
+        int matrixSize = 1000;
+        int threadAmount = 20;
         MatrixUtil matrixUtil = new MatrixUtil();
         Matrix matrix = matrixUtil.initializeRandomMatrix(matrixSize);
 //        System.out.println("---------------Main Matrix ---------------");

@@ -15,23 +15,22 @@ public class HeadThread extends ClassicThread {
 
     public AtomicInteger lastNeedRowIndex = new AtomicInteger();
 
-    public Synchronizer synchronizer;
 
-
-    public HeadThread(Matrix result, int iteration, int matrixLength, Object lock, Synchronizer synchronizer) {
-        super(result, iteration, matrixLength, synchronizer);
+    public HeadThread(Matrix result, int iteration, int matrixLength, Object lock, Synchronizer synchronizer,int threadAmount) {
+        super(result, iteration, matrixLength, synchronizer,threadAmount);
         this.result = result;
         this.iteration = iteration;
         this.lock = lock;
         this.matrixLength = matrixLength;
-        this.synchronizer = synchronizer;
     }
 
     @Override
     public void run() {
         int[] row;
         int[] column;
-        while (!synchronizer.getAlgorithmEnd()) {
+        while (iteration<matrixLength) {
+            lastNeedRowIndex.set(0);
+            lastNeedColumnIndex.set(iteration);
             for (int i = 0; i < matrixLength; i++) {
                 while (rows.isEmpty() && columns.isEmpty()) {
                     isNeedNewData = true;
@@ -79,6 +78,7 @@ public class HeadThread extends ClassicThread {
                     throw new RuntimeException(e);
                 }
             }
+            iteration+=threadAmount;
         }
     }
 
