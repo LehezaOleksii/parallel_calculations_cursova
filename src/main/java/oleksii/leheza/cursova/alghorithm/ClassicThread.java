@@ -39,6 +39,7 @@ public class ClassicThread extends Thread {
     @Override
     public void run() {
         multiply();
+        System.out.println("2");
     }
 
     protected void multiply() {

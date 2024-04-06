@@ -60,5 +60,6 @@ public class EndThread extends ClassicThread {
             }
             iteration+=threadAmount;
         }
+        System.out.println("3");
     }
 }
