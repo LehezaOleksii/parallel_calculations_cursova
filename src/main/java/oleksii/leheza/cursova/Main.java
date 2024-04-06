@@ -8,14 +8,10 @@ import oleksii.leheza.cursova.util.MatrixUtil;
 
 public class Main {
 
-    // 6-500  - 0,93
-    // 6-1000 - 1,48
-    //6-1500  - 3,81
-    // 6-2000 - 4,4
     public static void main(String[] args) {
         System.out.println("---------------Start program---------------");
-        int matrixSize = 1000;
-        int threadAmount = 20;
+        int matrixSize = 500;
+        int threadAmount = 4;
         MatrixUtil matrixUtil = new MatrixUtil();
         Matrix matrix = matrixUtil.initializeRandomMatrix(matrixSize);
 //        System.out.println("---------------Main Matrix ---------------");
