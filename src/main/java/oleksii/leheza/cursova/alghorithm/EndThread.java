@@ -34,17 +34,6 @@ public class EndThread extends ClassicThread {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                if (nextThread != null) {
-                    if (i == 0) {
-                        nextThread.setValueToLastColumn(column);
-                    } else {
-                        nextThread.addColumnToQueue(column);
-                    }
-                    nextThread.addRowToQueue(row);
-                    synchronized (nextThread.lockObj) {
-                        nextThread.lockObj.notify();
-                    }
-                }
 
                 int sum = 0;
                 for (int n = 0; n < row.length; n++) {
