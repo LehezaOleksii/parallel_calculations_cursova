@@ -80,7 +80,6 @@ public class HeadThread extends ClassicThread {
             }
             iteration+=threadAmount;
         }
-        System.out.println("1");
     }
 
     public void addColumnToQueue(int[] column) {
