@@ -1,9 +1,9 @@
-package oleksii.leheza.cursova.basic;
+package oleksii.leheza.cursova.base;
 
 
 import oleksii.leheza.cursova.matrix.Matrix;
 
-public class BasicMatrixMultiply {
+public class BaseMatrixMultiply {
 
     public void multiplyMatrix(Matrix firstMatrix, Matrix secondMatrix, Matrix result) {
         if (firstMatrix.getMatrixSize() == secondMatrix.getMatrixSize()) {
