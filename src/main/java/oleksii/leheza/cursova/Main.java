@@ -1,7 +1,7 @@
 package oleksii.leheza.cursova;
 
 import oleksii.leheza.cursova.alghorithm.StripedMatrixMultiplication;
-import oleksii.leheza.cursova.basic.BasicMatrixMultiply;
+import oleksii.leheza.cursova.base.BaseMatrixMultiply;
 import oleksii.leheza.cursova.matrix.Matrix;
 import oleksii.leheza.cursova.util.MatrixUtil;
 
@@ -19,7 +19,7 @@ public class Main {
         Matrix result1 = new Matrix(matrixSize);
         Matrix result2Matrix = new Matrix(matrixSize);
 
-        BasicMatrixMultiply basicMatrixMultiply = new BasicMatrixMultiply();
+        BaseMatrixMultiply basicMatrixMultiply = new BaseMatrixMultiply();
         StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication(matrix, matrix, threadAmount, result2Matrix);
         long startTime1 = System.currentTimeMillis();
         basicMatrixMultiply.multiplyMatrix(matrix, matrix, result1);
