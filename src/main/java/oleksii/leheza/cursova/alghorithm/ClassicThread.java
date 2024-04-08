@@ -44,7 +44,7 @@ public class ClassicThread extends Thread {
     protected void multiply() {
         int[] row;
         int[] column;
-        while (iteration <matrixLength) {
+        while (iteration < matrixLength) {
             for (int i = 0; i < matrixLength; i++) {
                 while (rows.isEmpty()) {
                     try {
@@ -65,16 +65,14 @@ public class ClassicThread extends Thread {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                if (nextThread != null) {
-                    if (i == 0) {
-                        nextThread.setValueToLastColumn(column);
-                    } else {
-                        nextThread.addColumnToQueue(column);
-                    }
-                    nextThread.addRowToQueue(row);
-                    synchronized (nextThread.lockObj) {
-                        nextThread.lockObj.notify();
-                    }
+                if (i == 0) {
+                    nextThread.setValueToLastColumn(column);
+                } else {
+                    nextThread.addColumnToQueue(column);
+                }
+                nextThread.addRowToQueue(row);
+                synchronized (nextThread.lockObj) {
+                    nextThread.lockObj.notify();
                 }
 
                 int sum = 0;
@@ -94,7 +92,7 @@ public class ClassicThread extends Thread {
                     }
                 }
             }
-            iteration+=threadAmount;
+            iteration += threadAmount;
         }
     }
 
